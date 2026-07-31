@@ -22,7 +22,7 @@ student_graph = {}
 num_edges = int(input("How many edges (connections) does your graph have? ")) 
 print("Enter each edge separated by a space (e.g., A B):") 
 
-for i in range(num_edges): 
+for i in range(num_edges):    
     # Read the input and split it into two variables 
     u, v = input(f"Edge {i+1}: ").split() 
     
