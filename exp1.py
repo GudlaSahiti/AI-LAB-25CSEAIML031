@@ -6,7 +6,7 @@ def bfs(graph, start_node):
         current_node = queue.pop(0)
 
         if current_node not in visited:
-            print(f"Explotring node: {current_node}")
+            print(f"Exploring node: {current_node}")
             visited.append(current_node)
 
             #.get() prevents errors if a node has no outgoing edges
