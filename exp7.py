@@ -1,47 +1,50 @@
-from collections import deque
+#8 queens
+def is_safe(board, row, col):
+    # Check current column in previous rows
+    for i in range(row):
+        if board[i][col] == 'Q':
+            return False
 
-def water_jug(cap1, cap2, target_state):
-    visited = set()
-    queue = deque()
+    # Check upper-left diagonal
+    i, j = row - 1, col - 1
+    while i >= 0 and j >= 0:
+        if board[i][j] == 'Q':
+            return False
+        i -= 1
+        j -= 1
 
-    #queue stores: (jug1_water, jug2_water, path_history)
-    queue.append((0, 0, []))
+    # Check upper-right diagonal
+    i, j = row - 1, col + 1
+    while i >= 0 and j < 8:
+        if board[i][j] == 'Q':
+            return False
+        i -= 1
+        j += 1
 
-    while queue:
-        j1, j2, path = queue.popleft()
+    return True
 
-        if(j1, j2) in visited:
-            continue
-        visited.add((j1, j2))
 
-        current_path = path + [(j1, j2)]
+def solve_8queens(board, row):
+    if row == 8:
+        return True
 
-        #check if target state (e.g.,(2,3)) is reached
-        if (j1, j2) == target_state:
-            return current_path
+    for col in range(8):
+        if is_safe(board, row, col):
+            board[row][col] = 'Q'
 
-        #generate all possible next moves
-        next_moves = [
-            (cap1,j2),      #fill jug1
-            (j1,cap2),      #fill jug2
-            (0,j2),         #empty jug 1
-            (j1,0),         #empty jug 2
-            (j1-min(j1,cap2-j2),j2+min(j1,cap2-j2)),    #pour jug 1 -> jug 2
-            (j1+min(j2,cap1-j1),j2-min(j2,cap1-j1)),    #pour jug 2 -> jug 1
-        ]
+            if solve_8queens(board, row + 1):
+                return True
 
-        for move in next_moves:
-            if move not in visited:
-                queue.append((move[0], move[1], current_path))
-    return None
+            board[row][col] = '.'
 
-#solve for jug 1 capacity = 4l, jug 2 capacity = 3l, goal state = (2,3)
-target_goal = (4,2)
-solution = water_jug(4, 3, target_goal)
+    return False
 
-if solution:
-    print(f"steps to reach target state {target_goal}:")
-    for step in solution:
-        print(step)
+
+# Initialize 8x8 board
+board = [['.' for _ in range(8)] for _ in range(8)]
+
+if solve_8queens(board, 0):
+    for row in board:
+        print(" ".join(row))
 else:
-    print("no solution exists.")
+    print("No solution exists.")
